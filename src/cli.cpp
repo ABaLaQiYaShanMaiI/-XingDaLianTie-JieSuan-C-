@@ -78,7 +78,7 @@ std::string process_pdf_core(
 
     // --- 4. 生成 Excel ---
     fs::path pdf_fs(pdf_path);
-    std::string excel_name = pdf_fs.stem().string() + "\u660e\u7ec6.xlsx"; // "明细.xlsx"
+    std::string excel_name = pdf_fs.stem().string() + "\u660e\u7ec6.xls"; // "明细.xls"
     fs::path out_dir(output_dir);
     fs::create_directories(out_dir);
     fs::path output_path = out_dir / excel_name;

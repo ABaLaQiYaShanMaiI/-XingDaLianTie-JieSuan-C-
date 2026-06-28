@@ -10,6 +10,7 @@
 #include <array>
 #include <memory>
 #include <set>
+#include <random>
 
 #ifndef _WIN32
 #include <cstdlib>
@@ -26,6 +27,15 @@ static const int MAX_ITEM_INDEX = 99;
 static const double MIN_ASSESSMENT_AMOUNT = 1.0;
 static const int REWARD_SCAN_LINES = 5;
 static const double REWARD_FILTER_THRESHOLD = 10.0;
+
+// 生成唯一临时文件名（避免多实例并发冲突）
+static fs::path make_temp_path(const std::string& prefix, const std::string& suffix) {
+    static std::mt19937 rng(static_cast<unsigned>(std::random_device{}()));
+    static std::uniform_int_distribution<int> dist(100000, 999999);
+    fs::path temp_dir = fs::temp_directory_path();
+    std::string unique_name = prefix + "_" + std::to_string(dist(rng)) + suffix;
+    return temp_dir / unique_name;
+}
 
 // ============================================================
 // 正则模式（与 Python 版对齐）
@@ -124,9 +134,8 @@ static std::string extract_pdf_text(const std::string& pdf_path) {
     std::string pdftotext_cmd = "pdftotext";
 #endif
 
-    // 创建临时输出文件
-    fs::path temp_dir = fs::temp_directory_path();
-    fs::path temp_out = temp_dir / "xingda_pdf_text_temp.txt";
+    // 创建临时输出文件（使用唯一名称避免并发冲突）
+    fs::path temp_out = make_temp_path("xingda_pdf_text", ".txt");
 
     // 构建命令
     std::string cmd = pdftotext_cmd + " -layout \"" + pdf_path + "\" \"" + temp_out.string() + "\" 2>&1";
@@ -168,7 +177,7 @@ static std::string ocr_pdf(const std::string& pdf_path, int dpi = 300) {
     // 这是一个简化的实现
     
     fs::path temp_dir = fs::temp_directory_path();
-    fs::path image_prefix = temp_dir / "xingda_ocr_page";
+    fs::path image_prefix = make_temp_path("xingda_ocr_page", "");
 
 #ifdef _WIN32
     std::string pdftoppm_cmd = "pdftoppm.exe";

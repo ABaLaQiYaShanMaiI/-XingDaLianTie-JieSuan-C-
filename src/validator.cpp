@@ -1,5 +1,6 @@
 #include "validator.h"
 #include <sstream>
+#include <vector>
 #include <cmath>
 #include <iomanip>
 
@@ -36,11 +37,17 @@ static std::string fmt_amount(double v) {
     std::ostringstream ss;
     ss << std::fixed << std::setprecision(2) << v;
     std::string s = ss.str();
-    // 添加千位分隔符
-    int pos = s.find('.');
-    if (pos == std::string::npos) pos = s.size();
+    // 添加千位分隔符（从后向前处理，避免插入后索引偏移）
+    int pos = static_cast<int>(s.find('.'));
+    if (pos == std::string::npos) pos = static_cast<int>(s.size());
+    // 预计算位置，从后向前插入
+    std::vector<int> insert_positions;
     for (int i = pos - 3; i > 0; i -= 3) {
-        s.insert(i, ",");
+        insert_positions.push_back(i);
+    }
+    // 从后向前插入，以补偿位置偏移
+    for (auto it = insert_positions.rbegin(); it != insert_positions.rend(); ++it) {
+        s.insert(*it, ",");
     }
     return s;
 }

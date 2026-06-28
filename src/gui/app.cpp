@@ -133,8 +133,6 @@ MainFrame::MainFrame(const wxString& title)
     BuildMenuBar();
 
     // --- 标题区域 ---
-    BuildHeader();
-    
     auto headerBox = new wxBoxSizer(wxVERTICAL);
     auto* titleLabel = new wxStaticText(mainPanel, wxID_ANY,
         L"\u5174\u8fbe\u70bc\u94c1\u4fdd\u4ea7\u4e8b\u4e1a\u90e8 \u00b7 \u7ed3\u7b97\u5355\u660e\u7ec6\u5de5\u5177",
@@ -323,12 +321,6 @@ void MainFrame::BuildMenuBar() {
     SetAcceleratorTable(accel);
 }
 
-void MainFrame::BuildHeader() {}
-void MainFrame::BuildFileSection() {}
-void MainFrame::BuildOptionsSection() {}
-void MainFrame::BuildButtons() {}
-void MainFrame::BuildLogArea() {}
-void MainFrame::BuildStatusBar() {}
 
 // ============================================================
 // 事件处理

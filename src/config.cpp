@@ -162,6 +162,7 @@ ClassifyRules ClassifyRules::load_default() {
 ClassifyRules ClassifyRules::load_from_yaml(const std::string& filepath) {
     std::ifstream file(filepath);
     if (!file.is_open()) {
+        std::fprintf(stderr, "[警告] 找不到配置文件 '%s'，使用内置默认规则。\n", filepath.c_str());
         return load_default();
     }
 

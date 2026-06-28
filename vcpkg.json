@@ -1,0 +1,8 @@
+{
+  "name": "xingda-jiesuan",
+  "version": "3.0.0",
+  "description": "XingDa PDF Settlement to Excel Tool",
+  "dependencies": [
+    "wxwidgets"
+  ]
+}

@@ -37,12 +37,24 @@ struct AreaRule {
             std::string pattern = prefix + std::string("\\d+");
             try {
                 compiled_equipment_re.emplace_back(pattern);
-            } catch (...) {}
+            } catch (const std::regex_error& e) {
+                std::fprintf(stderr, "[警告] 区域 '%s' 的设备前缀正则 '%s' 编译失败: %s，已跳过。\n",
+                    name.c_str(), pattern.c_str(), e.what());
+            } catch (...) {
+                std::fprintf(stderr, "[警告] 区域 '%s' 的设备前缀正则 '%s' 编译失败，已跳过。\n",
+                    name.c_str(), pattern.c_str());
+            }
         }
         for (const auto& pat : description_patterns) {
             try {
                 compiled_pattern_re.emplace_back(pat);
-            } catch (...) {}
+            } catch (const std::regex_error& e) {
+                std::fprintf(stderr, "[警告] 区域 '%s' 的描述正则 '%s' 编译失败: %s，已跳过。\n",
+                    name.c_str(), pat.c_str(), e.what());
+            } catch (...) {
+                std::fprintf(stderr, "[警告] 区域 '%s' 的描述正则 '%s' 编译失败，已跳过。\n",
+                    name.c_str(), pat.c_str());
+            }
         }
     }
 };
